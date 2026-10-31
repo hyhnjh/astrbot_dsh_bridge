@@ -1,0 +1,4 @@
+# AstrBot → DSH：把 @ 到的消息交给 DSH 干活
+- insert:
+    - id: astrbot-bridge
+      name: 'dsh-astrbot-bridge'

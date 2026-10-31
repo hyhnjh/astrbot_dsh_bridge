@@ -1,0 +1,5 @@
+name: astrbot_dsh_bridge
+display_name: 接到 DSH
+desc: 需要动手的活交给本机 DSH，回话仍由 AstrBot 自己说（人格不丢）。装完在插件配置里填「聊天 → DSH 会话」绑定即生效；聊天发 /dsh 看自检卡片，发「/dsh 任务」直接执行，说「值班」才会跑完整日报。插件页 README 有使用须知。
+version: 0.4.0
+author: hyhnjh

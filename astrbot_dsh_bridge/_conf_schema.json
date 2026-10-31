@@ -1,0 +1,63 @@
+{
+  "mode": {
+    "description": "运行模式",
+    "type": "string",
+    "default": "tool",
+    "options": ["tool", "direct", "both"],
+    "hint": "tool = 注册 dsh_run 工具，模型自己判断要不要动手（推荐，人格不丢）；direct = @ 到就整轮转发给 DSH 回话（人格会丢，仅排障）；both = 两条都开。"
+  },
+  "timeout": {
+    "description": "单次最长等待（秒）",
+    "type": "int",
+    "default": 90,
+    "hint": "工具模式下等 DSH 干完的最长时间。建议比 DSH 侧配置里的 toolTimeoutMs 小 5~10 秒，好让 DSH 先返回中间结果。首次调用会慢（要建工作会话），之后正常。"
+  },
+  "bindings": {
+    "description": "聊天 → DSH 会话 绑定",
+    "type": "list",
+    "default": [],
+    "hint": "每行一条，等号左边是 AstrBot 的会话 key，右边是 DSH 的 session id。\n例：肥鱼:FriendMessage:2604290364 = session-17248a5f-5cb9-486e-a2d6-72ebaa80abb1\n\nkey 的格式是 <平台id>:<消息类型>:<会话号>。平台 id 在 AstrBot 的 cmd_config.json 里 platform[].id（本机是「肥鱼」），不是 aiocqhttp。\nsession id 在 DSH 侧可用 GET /astrbot-bridge/api/sessions 查，或绑定后从 DSH 日志里看。\n\n改完保存即生效，插件会自动推给 DSH（见 auto_bind）。"
+  },
+  "auto_bind": {
+    "description": "保存配置时自动推送绑定给 DSH",
+    "type": "bool",
+    "default": true,
+    "hint": "开启后，插件加载/保存配置时会把上面 bindings 里的每一行 POST 给 DSH 的 /bind 接口，不用再手动 curl。关掉则只在 DSH 侧已有绑定时生效。"
+  },
+  "admin_full_access": {
+    "description": "管理员默认拿到 DSH 全部工具",
+    "type": "bool",
+    "default": true,
+    "hint": "开启（默认）：AstrBot 管理员（cmd_config 里的 admins_id）发起的任务，DSH 侧不做限制；其他人只拿到 DSH 白名单里的工具（bili_* / web_* 等，可在 DSH 侧 guestAllow 里改）。\n关掉：连管理员也只走白名单。\n这是工具级强制——被挡掉的工具对模型不可见，不是靠提示词约束。"
+  },
+  "prefix_direct": {
+    "description": "前缀直连：/dsh 开头的消息直接转给 DSH",
+    "type": "bool",
+    "default": false,
+    "hint": "开启后，聊天里发「/dsh 看一下 D 盘还剩多少」就不再经过模型判断，直接当命令执行、原样回结果。\n适合你明确知道自己要什么的时候；平时闲聊/需要它理解意图时，让它自己判断（关掉这个开关）更好。\n前缀可在下面 trigger_prefix 改。"
+  },
+  "trigger_prefix": {
+    "description": "前缀直连用的前缀",
+    "type": "string",
+    "default": "/dsh",
+    "hint": "默认 /dsh。改成「!dsh」之类也行；留空则前缀直连不生效。"
+  },
+  "job_max_wait": {
+    "description": "长任务最多追多久（秒）",
+    "type": "int",
+    "default": 600,
+    "hint": "任务超过 timeout 还没跑完时，会转到后台继续等，跑完补发一条消息到原聊天。这里控制后台最多追多久（默认 10 分钟）。刷 B站那种长任务建议 600~1800。"
+  },
+  "dsh_url": {
+    "description": "DSH 地址（可留空）",
+    "type": "string",
+    "default": "",
+    "hint": "留空 = 自动读 ~/.dsh/astrbot-bridge-endpoint.json（DSH 每次启动端口可能变，推荐留空）。只有在 DSH 不在本机、或想指向固定地址时才填，例如 http://127.0.0.1:63600。"
+  },
+  "token": {
+    "description": "DSH 访问令牌（可留空）",
+    "type": "string",
+    "default": "",
+    "hint": "留空 = 自动读 ~/.dsh/astrbot-bridge-config.json 里的 token（推荐）。DSH 侧首次启动会自动生成，一般不用手填。"
+  }
+}
