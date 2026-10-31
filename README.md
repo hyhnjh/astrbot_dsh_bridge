@@ -48,3 +48,4 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1 `
 - 图片只传文字。
 - 工作会话由插件自建，侧栏里看不到。
 - 冷启动第一轮较慢（建会话 + 挂 preset），之后正常。
+本内容已为旧版，部分内容与实际不符
